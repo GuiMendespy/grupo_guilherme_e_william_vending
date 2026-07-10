@@ -36,7 +36,7 @@ module tb_vending;
 
   initial begin
     uvm_config_db#(virtual vending_interface)::set(null, "*", "vif", vif);
-    run_test("vending_test_compra_sucesso");
+    run_test("vending_test_all");
   end
 
 endmodule : tb_vending

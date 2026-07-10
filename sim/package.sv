@@ -353,4 +353,35 @@ package vending_tb_pkg;
         endtask
     endclass
 
+    class vending_test_all extends vending_test_base;
+        `uvm_component_utils(vending_test_all)
+
+        function new(string name = "vending_test_all", uvm_component parent = null);
+            super.new(name, parent);
+        endfunction
+
+        task run_phase(uvm_phase phase);
+            vending_sequence_compra_sucesso       seq_compra;
+            vending_sequence_credito_insuficiente seq_credito;
+            vending_sequence_cancelamento         seq_cancela;
+            vending_sequence_estoque_esgotado     seq_estoque;
+
+            phase.raise_objection(this);
+
+            seq_compra = vending_sequence_compra_sucesso::type_id::create("seq_compra");
+            seq_compra.start(env.sqr);
+
+            seq_credito = vending_sequence_credito_insuficiente::type_id::create("seq_credito");
+            seq_credito.start(env.sqr);
+
+            seq_cancela = vending_sequence_cancelamento::type_id::create("seq_cancela");
+            seq_cancela.start(env.sqr);
+
+            seq_estoque = vending_sequence_estoque_esgotado::type_id::create("seq_estoque");
+            seq_estoque.start(env.sqr);
+
+            phase.drop_objection(this);
+        endtask
+    endclass
+
 endpackage
