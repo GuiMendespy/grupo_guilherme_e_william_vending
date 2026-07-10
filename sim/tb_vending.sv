@@ -1,16 +1,17 @@
 `timescale 1ns/1ps
 
+`include "uvm_macros.svh"
 import uvm_pkg::*;
-import vending_pkg::*;
+import vending_tb_pkg::*;
 
-module testbench;
+module tb_vending;
 
   logic clk;
   logic rst;
 
   vending_interface vif (.clk(clk), .rst(rst));
 
-  top_level dut (
+  vending_top dut (
     .coin_in(vif.coin_in),
     .sel_item(vif.sel_item),
     .confirm(vif.confirm),
@@ -38,4 +39,4 @@ module testbench;
     run_test("vending_test_compra_sucesso");
   end
 
-endmodule
+endmodule : tb_vending

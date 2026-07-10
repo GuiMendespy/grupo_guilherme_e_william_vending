@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 package vending_pkg;
 
   // Codificação de 3 bits para os 6 estados da FSM (Moore)
@@ -11,8 +12,9 @@ package vending_pkg;
   } estado_t;
 
   // Constantes em ponto fixo (valores em centavos) para o memória e o comparador.
-  localparam int VAL_MOEDA_25  = 25;
-  localparam int VAL_MOEDA_50  = 50;
-  localparam int VAL_MOEDA_100 = 100;
+  // Antes: parameter VAL_MOEDA_25 = 25;
+  parameter bit [7:0] VAL_MOEDA_25 = 8'd25;
+  parameter bit [7:0] VAL_MOEDA_50 = 8'd50;
+  parameter bit [7:0] VAL_MOEDA_100 = 8'd100;
 
 endpackage : vending_pkg

@@ -1,6 +1,6 @@
 `include "uvm_macros.svh"
 
-package vending_pkg;
+package vending_tb_pkg;
     import uvm_pkg::*;
 
     class vending_transaction extends uvm_sequence_item;
@@ -61,7 +61,6 @@ package vending_pkg;
         endtask
     endclass
 
-    // Cenario 3: Cancelamento com moedas acumuladas -> retorno imediato a IDLE, credito zerado
     class vending_sequence_cancelamento extends uvm_sequence #(vending_transaction);
         `uvm_object_utils(vending_sequence_cancelamento)
 
@@ -82,7 +81,6 @@ package vending_pkg;
         endtask
     endclass
 
-    // Cenario 4: Esgotamento de estoque -> 5 compras de cafe, 6a deve falhar com erro
     class vending_sequence_estoque_esgotado extends uvm_sequence #(vending_transaction);
         `uvm_object_utils(vending_sequence_estoque_esgotado)
 
@@ -95,8 +93,8 @@ package vending_pkg;
             repeat (6) begin
                 req = vending_transaction::type_id::create("req");
                 start_item(req);
-                req.coin_in  = 2'b11; // R$1,00 (suficiente pro cafe)
-                req.sel_item = 2'b00; // Cafe (estoque inicial 5)
+                req.coin_in  = 2'b11; 
+                req.sel_item = 2'b00; 
                 req.confirm  = 1;
                 req.cancel   = 0;
                 finish_item(req);
@@ -107,7 +105,7 @@ package vending_pkg;
     class vending_driver extends uvm_driver #(vending_transaction);
         `uvm_component_utils(vending_driver)
 
-        virtual vending_interface.DRIVER vif;
+        virtual vending_interface vif;
 
         function new(string name, uvm_component parent);
             super.new(name, parent);
@@ -124,10 +122,8 @@ package vending_pkg;
             forever begin
                 seq_item_port.get_next_item(req);
 
-                // Seleciona o item e mantem estavel durante o cenario
                 vif.drv_cb.sel_item <= req.sel_item;
 
-                // Pulso de moeda (1 ciclo ligado, depois volta a 00)
                 if (req.coin_in != 2'b00) begin
                     @(vif.drv_cb);
                     vif.drv_cb.coin_in <= req.coin_in;
@@ -135,7 +131,6 @@ package vending_pkg;
                     vif.drv_cb.coin_in <= 2'b00;
                 end
 
-                // Pulso de confirm, esperando 2 ciclos apos a moeda
                 if (req.confirm) begin
                     repeat(2) @(vif.drv_cb);
                     vif.drv_cb.confirm <= 1;
@@ -143,7 +138,6 @@ package vending_pkg;
                     vif.drv_cb.confirm <= 0;
                 end
 
-                // Pulso de cancel, esperando 2 ciclos apos a moeda (mesmo timing do confirm)
                 if (req.cancel) begin
                     repeat(2) @(vif.drv_cb);
                     vif.drv_cb.cancel <= 1;
@@ -159,7 +153,7 @@ package vending_pkg;
     class vending_monitor extends uvm_monitor;
         `uvm_component_utils(vending_monitor)
 
-        virtual vending_interface.MONITOR vif;
+        virtual vending_interface vif;
         uvm_analysis_port #(vending_transaction) ap;
 
         function new(string name, uvm_component parent);
@@ -225,27 +219,27 @@ package vending_pkg;
 
             if (tr.dispense && !prev_dispense) begin
                 if (credit >= price[tr.sel_item] && stock[tr.sel_item] > 0) begin
-                    `uvm_info("SCOREBOARD", "PASS - dispense com credito e estoque suficientes", UVM_LOW)
+                    `uvm_info("SCOREBOARD", "[PASS] Dispense com credito e estoque suficientes", UVM_LOW)
                     stock[tr.sel_item]--;
                 end else begin
-                    `uvm_error("SCOREBOARD", "FAIL - dispense ocorreu sem credito/estoque suficientes")
+                    `uvm_error("SCOREBOARD", "[FAIL] Dispense ocorreu sem credito/estoque suficientes")
                 end
             end
 
             if (tr.error && !prev_error) begin
                 if (credit < price[tr.sel_item] || stock[tr.sel_item] == 0) begin
-                    `uvm_info("SCOREBOARD", "PASS - erro ocorreu corretamente", UVM_LOW)
+                    `uvm_info("SCOREBOARD", "[PASS] Erro ocorreu corretamente conforme esperado", UVM_LOW)
                 end else begin
-                    `uvm_error("SCOREBOARD", "FAIL - erro ocorreu sem motivo valido")
+                    `uvm_error("SCOREBOARD", "[FAIL] Erro disparado indevidamente")
                 end
             end
 
             if (prev_dispense) begin
                 bit [7:0] exp_change = credit - price[tr.sel_item];
                 if (tr.change_out == exp_change) begin
-                    `uvm_info("SCOREBOARD", $sformatf("PASS - troco correto: %0d", tr.change_out), UVM_LOW)
+                    `uvm_info("SCOREBOARD", $sformatf("[PASS] Troco correto: %0d", tr.change_out), UVM_LOW)
                 end else begin
-                    `uvm_error("SCOREBOARD", $sformatf("FAIL - troco esperado %0d, obtido %0d", exp_change, tr.change_out))
+                    `uvm_error("SCOREBOARD", $sformatf("[FAIL] Troco incorreto. Esperado: %0d, Obtido: %0d", exp_change, tr.change_out))
                 end
                 credit = 0;
             end
@@ -282,7 +276,6 @@ package vending_pkg;
         endfunction
     endclass
 
-    // Base comum: monta o env, cada teste-filho so escolhe a sequence
     virtual class vending_test_base extends uvm_test;
         vending_env env;
 
@@ -296,7 +289,6 @@ package vending_pkg;
         endfunction
     endclass
 
-    // Cenario 1: compra bem-sucedida de cafe
     class vending_test_compra_sucesso extends vending_test_base;
         `uvm_component_utils(vending_test_compra_sucesso)
 
@@ -313,7 +305,6 @@ package vending_pkg;
         endtask
     endclass
 
-    // Cenario 2: credito insuficiente
     class vending_test_credito_insuficiente extends vending_test_base;
         `uvm_component_utils(vending_test_credito_insuficiente)
 
@@ -330,7 +321,6 @@ package vending_pkg;
         endtask
     endclass
 
-    // Cenario 3: cancelamento com creditos acumulados
     class vending_test_cancelamento extends vending_test_base;
         `uvm_component_utils(vending_test_cancelamento)
 
@@ -347,7 +337,6 @@ package vending_pkg;
         endtask
     endclass
 
-    // Cenario 4: esgotamento de estoque
     class vending_test_estoque_esgotado extends vending_test_base;
         `uvm_component_utils(vending_test_estoque_esgotado)
 

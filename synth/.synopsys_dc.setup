@@ -1,0 +1,27 @@
+# ============================================================
+# Configuração do Synopsys Design Compiler para SAED32_EDK
+# ============================================================
+
+# Caminho de busca das bibliotecas e pastas de projeto
+set search_path [concat $search_path "." "rtl" "synth" "/Tools/PDK/SAED32/EDK_Digital/lib/stdcell_rvt/db_nldm/"]
+
+# Biblioteca alvo de células lógicas standard cell
+set target_library "saed32rvt_tt1p05v25c.db"
+
+# Biblioteca de link (Inclusão das macros DesignWare do asterisco)
+set link_library "* saed32rvt_tt1p05v25c.db dw_foundation.sldb"
+
+# Biblioteca DesignWare para blocos aritméticos otimizados
+set synthetic_library "dw_foundation.sldb"
+
+# Diretório de trabalho temporário para análise e cache
+define_design_lib WORK -path ./work
+
+# Diretivas globais do interpretador SystemVerilog
+set hdlin_enable_rtl_for_iq 1
+set hdlin_check_no_latch true  ; # Bloqueia a criação de latches acidentais
+set compile_autonogate true
+
+puts "============================================================"
+puts "SAED32 e parametros Anti-Latch configurados com sucesso"
+puts "============================================================"

@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 import vending_pkg::*;
 
 module registrador_credito (
@@ -6,22 +7,13 @@ module registrador_credito (
   input  logic        cancel,
   input  logic        credit_load,
   input  logic [1:0]  coin_in,
-  //input  logic [2:0]  current_state, // logica alternativa no qual o credit_load é controlado pelo estado da FSM
-  input logic reset_credit,
+  input  logic        reset_credit,
   output logic [7:0]  credit
 );
 
-  // Registrador síncrono de acúmulo
-  always_ff @(posedge clk) begin
-    if (rst || reset_credit || cancel) begin
-      credit <= 8'd0; // Zera imediatamente
-    end else if (credit_load) begin
-      credit <= credit + coin_value; // Acumula 
-    end
-  end
-
-  // Mapeamento combinacional do valor da moeda inserida
   logic [7:0] coin_value;
+
+  // Mapeamento combinacional das moedas (Sintetizável)
   always_comb begin
     case (coin_in)
       2'b01  : coin_value = VAL_MOEDA_25;
@@ -30,4 +22,15 @@ module registrador_credito (
       default: coin_value = 8'd0;
     endcase
   end
+
+  // Registrador síncrono de acúmulo puro
+  // Removido o '$isunknown' que causava o crash fatal no Design Compiler
+  always_ff @(posedge clk) begin
+    if (rst || reset_credit || cancel) begin
+      credit <= 8'd0; 
+    end else if (credit_load) begin
+      credit <= credit + coin_value; // Acúmulo direto em lógica binária pura
+    end
+  end
+
 endmodule

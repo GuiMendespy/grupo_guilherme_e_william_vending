@@ -1,0 +1,24 @@
+ 
+****************************************
+check_design summary:
+Version:     X-2025.06-SP2
+Date:        Fri Jul 10 00:13:54 2026
+****************************************
+
+                   Name                                            Total
+--------------------------------------------------------------------------------
+Inputs/Outputs                                                      4
+    Shorted outputs (LINT-31)                                       2
+    Constant outputs (LINT-52)                                      2
+
+Cells                                                               2
+    Cells do not drive (LINT-1)                                     2
+--------------------------------------------------------------------------------
+
+Warning: In design 'registrador_credito', cell 'C82' does not drive any nets. (LINT-1)
+Warning: In design 'memoria', cell 'C195' does not drive any nets. (LINT-1)
+Warning: In design 'vending_top', output port 'state_out[2]' is connected directly to output port 'state_out[1]'. (LINT-31)
+Warning: In design 'unidade_controle', output port 'mem_write' is connected directly to output port 'dispense'. (LINT-31)
+Warning: In design 'vending_top', output port 'state_out[2]' is connected directly to 'logic 0'. (LINT-52)
+Warning: In design 'vending_top', output port 'state_out[1]' is connected directly to 'logic 0'. (LINT-52)
+1

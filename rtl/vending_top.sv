@@ -1,6 +1,6 @@
 import vending_pkg::*;
 
-module top_level (
+module vending_top (
   input  logic [1:0] coin_in,
   input  logic [1:0] sel_item,
   input  logic       confirm,
@@ -45,7 +45,7 @@ module top_level (
   );
 
   memoria mem_inst (
-    .clk(clk), .sel_item(sel_item), .mem_read(w_mem_read), .mem_write(w_mem_write),
+    .clk(clk), .rst(rst), .sel_item(sel_item), .mem_read(w_mem_read), .mem_write(w_mem_write),
     .price(w_price), .stock(w_stock)
   );
 

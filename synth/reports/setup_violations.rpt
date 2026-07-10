@@ -1,0 +1,68 @@
+ 
+****************************************
+Report : constraint
+        -all_violators
+Design : vending_top
+Version: X-2025.06-SP2
+Date   : Fri Jul 10 00:14:00 2026
+****************************************
+
+
+   min_delay/hold ('clk' group)
+
+                             Required        Actual
+   Endpoint                 Path Delay     Path Delay        Slack
+   -----------------------------------------------------------------
+   change_out_reg[0]/D          0.49           0.13 f        -0.36  (VIOLATED)
+   change_out_reg[1]/D          0.49           0.13 f        -0.36  (VIOLATED)
+   change_out_reg[2]/D          0.49           0.13 f        -0.36  (VIOLATED)
+   change_out_reg[3]/D          0.49           0.13 f        -0.36  (VIOLATED)
+   change_out_reg[4]/D          0.49           0.13 f        -0.36  (VIOLATED)
+   change_out_reg[5]/D          0.49           0.13 f        -0.36  (VIOLATED)
+   change_out_reg[6]/D          0.49           0.13 f        -0.36  (VIOLATED)
+   change_out_reg[7]/D          0.49           0.13 f        -0.36  (VIOLATED)
+   credit_inst/credit_reg[0]/D
+                                0.49           0.13 f        -0.36  (VIOLATED)
+   credit_inst/credit_reg[1]/D
+                                0.49           0.13 f        -0.36  (VIOLATED)
+   credit_inst/credit_reg[2]/D
+                                0.49           0.13 f        -0.36  (VIOLATED)
+   credit_inst/credit_reg[3]/D
+                                0.49           0.13 f        -0.36  (VIOLATED)
+   mem_inst/mem_reg[3][4]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[3][3]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[3][1]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[1][4]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[1][3]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[1][1]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[2][4]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[2][3]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[2][1]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[0][4]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[0][3]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[0][1]/D     0.49           0.14 f        -0.35  (VIOLATED)
+   credit_inst/credit_reg[6]/D
+                                0.49           0.14 f        -0.35  (VIOLATED)
+   credit_inst/credit_reg[4]/D
+                                0.49           0.14 f        -0.35  (VIOLATED)
+   credit_inst/credit_reg[5]/D
+                                0.49           0.15 f        -0.35  (VIOLATED)
+   mem_inst/mem_reg[2][0]/D     0.49           0.15 f        -0.34  (VIOLATED)
+   mem_inst/mem_reg[3][2]/D     0.49           0.15 f        -0.34  (VIOLATED)
+   mem_inst/mem_reg[0][0]/D     0.49           0.15 f        -0.34  (VIOLATED)
+   mem_inst/mem_reg[1][2]/D     0.49           0.15 f        -0.34  (VIOLATED)
+   mem_inst/mem_reg[2][2]/D     0.49           0.15 f        -0.34  (VIOLATED)
+   mem_inst/mem_reg[3][0]/D     0.49           0.15 f        -0.34  (VIOLATED)
+   mem_inst/mem_reg[0][2]/D     0.49           0.15 f        -0.34  (VIOLATED)
+   mem_inst/mem_reg[1][0]/D     0.49           0.15 f        -0.34  (VIOLATED)
+   credit_inst/credit_reg[7]/D
+                                0.49           0.19 r        -0.29  (VIOLATED)
+   fsm_inst/estado_atual_reg[2]/D
+                                0.49           0.20 f        -0.29  (VIOLATED)
+   fsm_inst/estado_atual_reg[0]/D
+                                0.49           0.21 f        -0.28  (VIOLATED)
+   fsm_inst/estado_atual_reg[1]/D
+                                0.49           0.22 f        -0.27  (VIOLATED)
+
+
+1
