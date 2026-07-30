@@ -4,6 +4,9 @@
 RTL_DIR   = rtl
 TB_DIR    = sim
 SYNTH_DIR = synth
+FM_DIR      = fm
+FM_TCL      = $(FM_DIR)/formality_fm.tcl
+SVF_FILE    = default.svf
 
 # ==========================================================
 # Arquivos RTL e Pacotes (Ordem estrita de dependência)
@@ -72,6 +75,27 @@ synth:
 	setarch `uname -m` -R dc_shell -f $(SYNTH_DIR)/synth.tcl
 
 # ==========================================================
+# Regra de Arquivo: Gera o TCL BASE apenas se ele NÃO existir
+# ==========================================================
+$(FM_TCL):
+	@echo "==> [Formality] $(FM_TCL) não encontrado. Gerando esqueleto inicial..."
+	@mkdir -p $(FM_DIR)
+	fm_mk_script -output $(FM_TCL) $(SVF_FILE)
+	@echo "==> [ATENÇÃO] Altere o arquivo $(FM_TCL) para incluir a Netlist (read_verilog -i ...) antes de rodar o 'make formality'."
+
+# Alvo para forçar a regeração do script TCL se necessário no futuro
+fm_gen:
+	@echo "==> [Formality] Regerando o script TCL base..."
+	@mkdir -p $(FM_DIR)
+	fm_mk_script -output $(FM_TCL) $(SVF_FILE)
+
+# ==========================================================
+# Alvo Principal: Roda a Verificação sem Sobrescrever
+# ==========================================================
+formality: $(FM_TCL)
+	@echo "==> [Formality] Executando verificação de equivalência com o script customizado..."
+	cd $(FM_DIR) && fm_shell -f formality_fm.tcl | tee formality_run.log
+# ==========================================================
 # Limpeza da síntese
 # ==========================================================
 clean_synth:
@@ -108,8 +132,19 @@ clean_sim:
 		default.svf
 
 # ==========================================================
+# Limpeza do Formality
+# ==========================================================
+clean_fm:
+	rm -rf \
+		$(FM_DIR)/*.log \
+		$(FM_DIR)/FM_WORK* \
+		$(FM_DIR)/reports \
+		$(FM_DIR)/formality_svf \
+		FM_WORK* \
+		*.log
+# ==========================================================
 # Limpeza total
 # ==========================================================
-clean: clean_sim clean_synth
+clean: clean_sim clean_synth clean_fm
 
-.PHONY: compile run wave synth clean clean_sim clean_synth
+.PHONY: compile run wave synth clean clean_sim clean_synth clean_fm
