@@ -55,13 +55,15 @@ redirect synth/reports/timing_pre.rpt {
   report_timing -max_paths 10
 }
 
+set_svf synth/reports/default.svf
+
 # ------------------------------------------------------------
 # Síntese Lógica Ultra Otimizada
 # ------------------------------------------------------------
 puts "\n=================================================="
 puts "INICIANDO SÍNTESE ULTRA (-no_autoungroup)"
 puts "=================================================="
-compile_ultra -no_autoungroup
+compile_ultra
 
 # ------------------------------------------------------------
 # Relatórios pós-síntese (Salvos diretamente em synth/)

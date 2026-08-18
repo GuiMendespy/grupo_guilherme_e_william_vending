@@ -5,8 +5,8 @@ RTL_DIR   = rtl
 TB_DIR    = sim
 SYNTH_DIR = synth
 FM_DIR      = fm
-FM_TCL      = $(FM_DIR)/formality_fm.tcl
-SVF_FILE    = default.svf
+FM_TCL      = $(FM_DIR)/formality.tcl
+SVF_FILE    = $(SYNTH_DIR)/reports/default.svf
 
 # ==========================================================
 # Arquivos RTL e Pacotes (Ordem estrita de dependência)
@@ -94,7 +94,7 @@ fm_gen:
 # ==========================================================
 formality: $(FM_TCL)
 	@echo "==> [Formality] Executando verificação de equivalência com o script customizado..."
-	cd $(FM_DIR) && fm_shell -f formality_fm.tcl | tee formality_run.log
+	fm_shell -f $(FM_TCL) | tee formality_run.log
 # ==========================================================
 # Limpeza da síntese
 # ==========================================================
